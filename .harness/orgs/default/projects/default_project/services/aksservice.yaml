@@ -1,0 +1,25 @@
+service:
+  name: aksservice
+  identifier: aksservice
+  serviceDefinition:
+    type: Kubernetes
+    spec:
+      manifests:
+        - manifest:
+            identifier: aksman
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: aksrepo
+                  gitFetchType: Branch
+                  paths:
+                    - .
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+              optionalValuesYaml: false
+  gitOpsEnabled: false
+  orgIdentifier: default
+  projectIdentifier: default_project
