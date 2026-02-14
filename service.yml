@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: myapp
+  name: myapp-jk
 spec:
   type: LoadBalancer
   selector:
-    app: myapp
+    app: myapp-jk
   ports:
   - port: 80
     targetPort: 80
