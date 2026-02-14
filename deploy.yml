@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
+  name: myapp-jk
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: myapp
+      app: myapp-jk
   template:
     metadata:
       labels:
-        app: myapp
+        app: myapp-jk
     spec:
       containers:
-      - name: myapp
+      - name: myapp-jk
         image: nginx
         ports:
         - containerPort: 80
