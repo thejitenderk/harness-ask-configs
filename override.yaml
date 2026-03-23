@@ -1,0 +1,93 @@
+# ─────────────────────────────────────────────────────────────
+# override/override-dev.yaml — DEV Environment
+# Harness CD usage:
+# helm upgrade --install voting-infra ./configs -f override/override-dev.yaml
+# helm upgrade --install voting-app ./voting-app-chart -f override/override-dev.yaml
+# ─────────────────────────────────────────────────────────────
+
+# ─── Global ──────────────────────────────────────────────────
+global:
+  namespace: voting-dev
+  environment: dev
+  labels:
+    env: dev
+    team: platform
+    project: voting-app
+
+# ─── Service Account ─────────────────────────────────────────
+serviceAccount:
+  create: true
+  name: voting-dev-sa
+  annotations: {}
+    # AWS EKS ke liye:
+    # eks.amazonaws.com/role-arn: arn:aws:iam::123456789:role/voting-dev-role
+
+# ─── Secrets ─────────────────────────────────────────────────
+postgres:
+  db: "votes_dev"
+  user: "postgres_dev"
+  password: "dev-pg-password-123"    # ← Harness secret se inject karo
+
+redis:
+  password: "dev-redis-password-123" # ← Harness secret se inject karo
+
+# ─── Services ────────────────────────────────────────────────
+services:
+  voteUi:
+    type: NodePort
+    port: 80
+    nodePort: 31000
+  resultUi:
+    type: NodePort
+    port: 80
+    nodePort: 31001
+  redis:
+    type: ClusterIP
+    port: 6379
+  db:
+    type: ClusterIP
+    port: 5432
+
+# ─── UI Deployments ──────────────────────────────────────────
+uis:
+  - name: vote-ui
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  - name: result-ui
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+# ─── Microservice Deployments ────────────────────────────────
+microservices:
+  - name: vote-api
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
+
+  - name: worker
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
