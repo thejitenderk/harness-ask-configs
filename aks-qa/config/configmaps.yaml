@@ -1,0 +1,29 @@
+# ─── Postgres ConfigMap ──────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-configmap
+data:
+  POSTGRES_DB: "votes"          # voting app ka database naam
+
+---
+# ─── Vote API ConfigMap ──────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vote-api-configmap
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+
+---
+# ─── Worker ConfigMap ────────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: worker-configmap
+data:
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  DATABASE_HOST: "db"
+  DATABASE_PORT: "5432"
